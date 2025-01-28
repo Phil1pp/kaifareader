@@ -147,6 +147,12 @@ class Config:
     def get_supplier(self):
         return str(self._config["supplier"])
 
+    def get_scale_factors(self):
+        if not "scale_factors" in self._config:
+            return None
+        else:
+            return self._config["scale_factors"]
+
     def get_file_export_enabled(self):
         if not "file_export_enabled" in self._config:
             return None
@@ -520,6 +526,13 @@ class Decrypt:
         else:
             return None
 
+    def set_generic_value(self, name, value):
+        d = getattr(Obis, name)
+        if d['byte'] in self.obis:
+            self.obis[d['byte']] = value
+        else:
+            g_log.error("Byte code {} not found in obis".format(d['byte']))
+
 def mqtt_on_connect(client, userdata, flags, rc):
     if rc == 0:
         g_log.info("MQTT: Client connected; rc={}".format(rc))
@@ -660,6 +673,13 @@ while True:
     dec = Decrypt(g_supplier, frame1, frame2, g_cfg.get_key_hex_string())
     if not dec.parse_all():
         continue
+
+    scale_factors = g_cfg.get_scale_factors()
+    if scale_factors is not None: 
+        for key, factor in scale_factors.items():
+            value = dec.get_generic_value(key)
+            if factor and value != None:
+                dec.set_generic_value(key, value * factor)
 
     for key, value in g_cfg.get_file_export_values().items():
         if value and dec.get_generic_value(key) != None:

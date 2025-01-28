@@ -7,6 +7,17 @@
   "bytesize": "serial.EIGHTBITS",
   "key_hex_string": "FDE9FA9EE356B184508E15D50231A1F9",
   "supplier": "KSMWest",
+  "scale_factors": {
+    "CurrentL1": 1,
+    "CurrentL2": 1,
+    "CurrentL3": 1,
+    "RealPowerIn": 1,
+    "RealPowerOut": 1,
+    "RealEnergyIn": 1,
+    "RealEnergyOut": 1,
+    "ReactiveEnergyInductive": 1,
+    "ReactiveEnergyCapacitive": 1
+  },
   "file_export_enabled": false,
   "file_export_abspath": "/etc/kaifareader/export.txt",
   "file_export_values": {
