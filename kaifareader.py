@@ -533,13 +533,13 @@ class Decrypt:
         else:
             g_log.error("Byte code {} not found in obis".format(d['byte']))
 
-def mqtt_on_connect(client, userdata, flags, rc):
+def mqtt_on_connect(client, userdata, flags, rc, properties):
     if rc == 0:
         g_log.info("MQTT: Client connected; rc={}".format(rc))
     else:
         g_log.error("MQTT: Client bad RC; rc={}".format(rc))
 
-def mqtt_on_disconnect(client, userdata, rc):
+def mqtt_on_disconnect(client, userdata, rc, properties):
     g_log.info("MQTT: Client disconnected; rc={}".format(rc))
     if rc != 0:
         g_log.info("MQTT: Trying auto-reconnect; rc={}".format(rc))
@@ -586,7 +586,7 @@ else:
 # connect to mqtt broker
 if g_cfg.get_mqtt_enabled():
     try:
-        mqtt_client = mqtt.Client("kaifareader", clean_session=False)
+        mqtt_client = mqtt.Client(callback_api_version=mqtt.CallbackAPIVersion.VERSION2, client_id="kaifareader", clean_session=False)
         mqtt_client.on_connect = mqtt_on_connect
         mqtt_client.on_disconnect = mqtt_on_disconnect
         mqtt_client.username_pw_set(g_cfg.get_mqtt_user(), g_cfg.get_mqtt_password())
