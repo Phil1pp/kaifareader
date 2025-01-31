@@ -539,7 +539,7 @@ def mqtt_on_connect(client, userdata, flags, rc, properties):
     else:
         g_log.error("MQTT: Client bad RC; rc={}".format(rc))
 
-def mqtt_on_disconnect(client, userdata, rc, properties):
+def mqtt_on_disconnect(client, userdata, flags, rc, properties):
     g_log.info("MQTT: Client disconnected; rc={}".format(rc))
     if rc != 0:
         g_log.info("MQTT: Trying auto-reconnect; rc={}".format(rc))
